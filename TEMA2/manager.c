@@ -45,8 +45,6 @@ int main(){
             break;
 
         default:
-            /*printf("esperando a que los proceso hijo2 finalice\n");
-            wait(&estado);*/
             pidc = fork();
             switch (pidc)
             {
