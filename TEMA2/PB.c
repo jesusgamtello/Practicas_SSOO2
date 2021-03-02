@@ -9,7 +9,7 @@ void copiar_examen();
 
 void main()
 {
-    printf("empieza B\n");
+    //printf("empieza B\n");
 
     FILE *fichero;
     char f[20];
@@ -24,7 +24,7 @@ void main()
     {
         printf("el fichero existe\n");
         leer_campos(fichero);
-        printf("termina B\n");
+        //printf("termina B\n");
         exit(EXIT_SUCCESS);
     }
     

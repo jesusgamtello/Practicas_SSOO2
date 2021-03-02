@@ -8,7 +8,7 @@ void crear_directorios();
 
 void main()
 {
-    printf("empieza A\n");
+    //printf("empieza A\n");
     FILE *fichero;
     char f[20];
 
@@ -22,7 +22,7 @@ void main()
     {
         printf("el fichero existe\n");
         leer_campos(fichero);
-     printf("Termina A\n");
+        //printf("Termina A\n");
 
         exit(EXIT_SUCCESS);
     }
