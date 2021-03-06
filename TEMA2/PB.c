@@ -3,9 +3,11 @@
 #include <string.h>
 #include <sys/stat.h>
 #include <dirent.h>
+#include <signal.h>
 
 void leer_campos();
 void copiar_examen();
+void manejador(int);
 
 void main()
 {
@@ -13,7 +15,8 @@ void main()
 
     FILE *fichero;
     char f[20];
-    
+    signal(SIGINT,manejador);
+
     fichero = fopen("estudiantes.txt", "rt");
     if (fichero == NULL )
     {
@@ -22,7 +25,6 @@ void main()
     }
     else
     {
-        printf("el fichero existe\n");
         leer_campos(fichero);
         //printf("termina B\n");
         exit(EXIT_SUCCESS);
@@ -57,4 +59,9 @@ void leer_campos(FILE *fichero)
     }
 
     fclose(fichero);
+}
+void manejador(int sig){
+    
+    printf("señal %d recibida en proceso B\n",sig);
+    exit(EXIT_SUCCESS); 
 }

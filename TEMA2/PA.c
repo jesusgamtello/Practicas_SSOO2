@@ -2,15 +2,20 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
+#include <errno.h>
+#include <signal.h>
 
 void leer_campos();
 void crear_directorios();
+void manejador(int);
+
 
 void main()
 {
     //printf("empieza A\n");
     FILE *fichero;
     char f[20];
+    signal(SIGINT,manejador);
 
     fichero = fopen("estudiantes.txt", "rt");
     if (fichero == NULL)
@@ -20,7 +25,6 @@ void main()
     }
     else
     {
-        printf("el fichero existe\n");
         leer_campos(fichero);
         //printf("Termina A\n");
 
@@ -56,4 +60,9 @@ void leer_campos(FILE *fichero)
  } while (!feof(fichero));
     
     fclose(fichero);
+}
+void manejador(int sig){
+    
+    printf("señal %d recibida en proceso A\n",sig);
+    exit(EXIT_SUCCESS); 
 }
