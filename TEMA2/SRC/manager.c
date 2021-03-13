@@ -31,10 +31,10 @@ int main(){
     signal(SIGINT,manejador);
 
     creacion_log();
-    /*if (system("./SRC/daemon &") == -1){
+    if (system("./SRC/daemon &") == -1){
         printf("error intentando ejecutar el demonio\n");
         return(EXIT_FAILURE);
-    }*/
+    }
     switch (pid)
     {
     case -1:
