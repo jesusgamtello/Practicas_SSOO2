@@ -9,7 +9,7 @@
 
 int main()
 {
-        mkdir("COPIA_SEGURIDAD",0777);
+        mkdir("COPIA_SEGURIDAD", 0777);
         while (1)
         {
                 if (system("cp -r ESTUDIANTES COPIA_SEGURIDAD") == -1)
@@ -17,8 +17,8 @@ int main()
                         printf("error haciendo la copia de seguridad\n");
                         return (EXIT_FAILURE);
                 }
-                
-                sleep(20);
+
+                sleep(60);
         }
         return (EXIT_SUCCESS);
 }

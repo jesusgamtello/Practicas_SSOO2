@@ -1,5 +1,0 @@
- ******** Log del sistema ********
-Creacion de directorios finalizada
-Copia de modelos finalizada
-La nota media de la clase es: 6
-FIN DE PROGRAMA

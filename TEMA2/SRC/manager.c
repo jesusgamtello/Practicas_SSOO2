@@ -31,7 +31,7 @@ int main(){
     signal(SIGINT,manejador);
 
     creacion_log();
-    if (system("./SRC/daemon &") == -1){
+    if (system("./EXEC/daemon &") == -1){
         printf("error intentando ejecutar el demonio\n");
         return(EXIT_FAILURE);
     }
@@ -41,7 +41,7 @@ int main(){
         perror("No se puede crear el proceso hijo\n");
         break;
     case 0:
-        if (execve("./SRC/PA", arg_list, var_list) == -1)
+        if (execve("./EXEC/PA", arg_list, var_list) == -1)
         {
             printf("Error no esperado en execve, ./PA\n");
             exit(EXIT_FAILURE);
@@ -57,7 +57,7 @@ int main(){
             perror("No se puede crear el proceso hijo\n");
             break;
         case 0:
-            if (execve("./SRC/PB", arg_list, var_list) == -1)
+            if (execve("./EXEC/PB", arg_list, var_list) == -1)
             {
                 printf("Error no esperado en execve, ./PB\n");
                 exit(EXIT_FAILURE);
@@ -72,7 +72,7 @@ int main(){
                 perror("No se puede crear el proceso hijo\n");
                 break;
             case 0:
-                if (execl("./SRC/PC", wr_tuberia, var_list) == -1)
+                if (execl("./EXEC/PC", wr_tuberia, var_list) == -1)
                 {
                     printf("Error no esperado en execl, ./PC\n");
                     exit(EXIT_FAILURE);
@@ -133,7 +133,7 @@ void limpiar(){
         perror("No se puede crear el proceso hijo\n");
         break;
     case 0:
-        if (execve("./SRC/PD", NULL, NULL) == -1)
+        if (execve("./EXEC/PD", NULL, NULL) == -1)
         {
             printf("Error no esperado en execve, ./PD\n");
             exit(EXIT_FAILURE);
