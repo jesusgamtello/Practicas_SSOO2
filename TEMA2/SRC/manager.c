@@ -11,6 +11,8 @@
 
 void manejador(int);
 void creacion_log();
+void log();
+void limpiar();
 int main(){
     pid_t pid,pidc,pidb;
     int tuberia [2];
@@ -19,6 +21,8 @@ int main(){
     int estado;
     char *arg_list[] = {NULL};
     char *var_list[] = {NULL};
+
+    char cadena [80];    
     
     pipe(tuberia);
     sprintf(wr_tuberia, "%d", tuberia[ESCRITURA]);
@@ -26,13 +30,18 @@ int main(){
 
     signal(SIGINT,manejador);
 
+    creacion_log();
+    /*if (system("./SRC/daemon &") == -1){
+        printf("error intentando ejecutar el demonio\n");
+        return(EXIT_FAILURE);
+    }*/
     switch (pid)
     {
     case -1:
         perror("No se puede crear el proceso hijo\n");
         break;
     case 0:
-        if (execve("./PA", arg_list, var_list) == -1)
+        if (execve("./SRC/PA", arg_list, var_list) == -1)
         {
             printf("Error no esperado en execve, ./PA\n");
             exit(EXIT_FAILURE);
@@ -40,6 +49,7 @@ int main(){
         break;
     default:
         wait(&estado);
+        log("Creacion de directorios finalizada\n");
         pidb = fork();
         switch (pidb)
         {
@@ -47,8 +57,7 @@ int main(){
             perror("No se puede crear el proceso hijo\n");
             break;
         case 0:
-            //signal(SIGINT,manejador);
-            if (execve("./PB", arg_list, var_list) == -1)
+            if (execve("./SRC/PB", arg_list, var_list) == -1)
             {
                 printf("Error no esperado en execve, ./PB\n");
                 exit(EXIT_FAILURE);
@@ -63,7 +72,7 @@ int main(){
                 perror("No se puede crear el proceso hijo\n");
                 break;
             case 0:
-                if (execl("./PC", wr_tuberia, var_list) == -1)
+                if (execl("./SRC/PC", wr_tuberia, var_list) == -1)
                 {
                     printf("Error no esperado en execl, ./PC\n");
                     exit(EXIT_FAILURE);
@@ -72,12 +81,12 @@ int main(){
                 break;
 
             default:
-                
                 waitpid(pidb,&estado,0);
+                log("Copia de modelos finalizada\n");
                 waitpid(pidc,&estado,0);
-                
-                read(tuberia[LECTURA], buffer,sizeof(buffer));
-                creacion_log(buffer);
+                read(tuberia[LECTURA], buffer,sizeof(buffer)); //controlar read
+                sprintf(cadena,"La nota media de la clase es: %s\nFIN DE PROGRAMA\n",buffer);
+                log(cadena);
                 printf("El valor leido de la tuberia es: %s\n", buffer);
                 printf("Todo terminao\n");
                 break;
@@ -89,33 +98,58 @@ int main(){
     }
     return 0;
 }
-void creacion_log(char buffer[16]){
-    char sentence[1024];
-    char *texto;
-    
-    texto = " ******** Log del sistema ********\n\
-    Creación de directorios finalizada.Copia de modelos de examen, finalizada.\n\
-    Creación de archivos con nota necesaria para alcanzar la nota de corte, finalizada.\n\
-    La nota media de la clase es: %s\n \
-   FIN DE PROGRAMA\n";
-  
+void creacion_log(){
     FILE *fptr;
+    char *texto;
+    texto = " ******** Log del sistema ********\n";
 
     fptr = fopen("log.txt", "w");
-    sprintf(sentence,texto,buffer);
-    printf(sentence);
 
     if (fptr == NULL) {
         printf("Error abriendo el fichero!");
         exit(EXIT_FAILURE);
     }
-    fprintf(fptr, "%s", sentence);
+    fputs(texto,fptr);
     fclose(fptr);
+}
+void log(char append [20]){
+    FILE *fptr;
+
+    fptr = fopen("log.txt", "a");
+    if (fptr == NULL) {
+        printf("Error abriendo el fichero!");
+        exit(EXIT_FAILURE);
+    }
+    fputs(append,fptr);
+    fclose(fptr);
+}
+void limpiar(){
+    pid_t pid;
+    int status;
+    pid = fork();
+    switch (pid)
+    {
+    case -1:
+        perror("No se puede crear el proceso hijo\n");
+        break;
+    case 0:
+        if (execve("./SRC/PD", NULL, NULL) == -1)
+        {
+            printf("Error no esperado en execve, ./PD\n");
+            exit(EXIT_FAILURE);
+        }
+        break;
+
+    default:
+        wait(&status);
+        break;
+    }
 }
 void manejador(int sig){
     
-    printf("señal %d recibida\n",sig);
-    kill(getpid(),SIGINT);
-
+    printf("señal %d recibida en manager\n",sig);
+    //kill(getpid(),SIGINT);
+    log("Interrupción por teclado\n");
+    limpiar();
     exit(EXIT_SUCCESS); 
 }

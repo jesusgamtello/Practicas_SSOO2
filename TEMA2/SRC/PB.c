@@ -17,14 +17,14 @@ void main()
     char f[20];
     signal(SIGINT,manejador);
 
-    fichero = fopen("estudiantes.txt", "rt");
+    fichero = fopen("./UTILS/estudiantes.txt", "rt");
     if (fichero == NULL )
     {
         printf("El fichero o el directorio no se pueden abrir\n");
         exit(EXIT_FAILURE);
     }
     else
-    {
+    {   //sleep(20);
         leer_campos(fichero);
         //printf("termina B\n");
         exit(EXIT_SUCCESS);
@@ -36,8 +36,11 @@ void main()
 void copiar_examen(char ruta_origen[40],char dni [8]){
     char comando[60];
   
-    sprintf(comando,"cp %s ESTUDIANTES/%s",ruta_origen,dni);
-    system(comando);
+    sprintf(comando,"cp %s ./ESTUDIANTES/%s",ruta_origen,dni);
+    if (system(comando) == -1){
+        printf("Error copiando examenes, PB\n");
+        return (EXIT_FAILURE);
+    }
 
 }
 void leer_campos(FILE *fichero)
@@ -51,7 +54,7 @@ void leer_campos(FILE *fichero)
     {
         if (fscanf(fichero, "%s %s %i", &dni, &examen, &nota) == 3)
         {   
-            sprintf(ruta_origen,"MODELOSEXAMEN/MODELO%s.pdf",examen);
+            sprintf(ruta_origen,"./UTILS/MODELOSEXAMEN/MODELO%s.pdf",examen);
             
             copiar_examen(ruta_origen,dni);
             

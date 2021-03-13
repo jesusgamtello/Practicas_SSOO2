@@ -12,21 +12,20 @@ void manejador(int);
 
 void main()
 {
-    //printf("empieza A\n");
     FILE *fichero;
     char f[20];
     signal(SIGINT,manejador);
 
-    fichero = fopen("estudiantes.txt", "rt");
+    fichero = fopen("./UTILS/estudiantes.txt", "rt");
     if (fichero == NULL)
     {
         printf("El fichero no existe\n");
         exit(EXIT_FAILURE);
     }
     else
-    {
+    {   
+        
         leer_campos(fichero);
-        //printf("Termina A\n");
 
         exit(EXIT_SUCCESS);
     }
@@ -36,7 +35,7 @@ void main()
 void crea_directorios(char dni[8]){
     char directorio[20];
 
-    sprintf(directorio,"ESTUDIANTES/%s",dni);
+    sprintf(directorio,"./ESTUDIANTES/%s",dni);
     mkdir(directorio,S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
 }
 
@@ -48,7 +47,7 @@ void leer_campos(FILE *fichero)
     int nota;
     char *dir;
 
-    dir = "ESTUDIANTES/";
+    dir = "./ESTUDIANTES";
 
     mkdir(dir,S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
     do

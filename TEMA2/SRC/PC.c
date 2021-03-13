@@ -20,7 +20,7 @@ void main(int argc, char *argv [])
    
     signal(SIGINT,manejador);
 
-    fichero = fopen("estudiantes.txt", "rt");
+    fichero = fopen("./UTILS/estudiantes.txt", "rt");
     if (fichero == NULL )
     {
         printf("El fichero o el directorio no se pueden abrir\n");
@@ -88,7 +88,7 @@ int leer_campos(FILE *fichero)
         if (fscanf(fichero, "%s %s %i", &dni, &examen, &nota) == 3)
         {   
             sumatorio_notas += nota;
-            sprintf(ruta_origen,"ESTUDIANTES/%s",dni);
+            sprintf(ruta_origen,"./ESTUDIANTES/%s",dni);
             calcular_nota(ruta_origen,nota);
             media_clase = nota_media_clase(nota,sumatorio_notas,media_clase,numero_estudiantes);
             numero_estudiantes++;
