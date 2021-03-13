@@ -1,3 +1,14 @@
+/********************************************************
+ * Project:         Práctica 1 de Sistemas Operativos II
+ * 
+ * Program name:    PA.c
+ * 
+ * Author:          Jesus Gamero Tello
+ *
+ * Purpose:         Aqui se crea el directorio ESTUDIANTES y dentro del mismo 
+ *                  su carpeta con el dni correspondiente  
+ *
+ *********************************************************/
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -24,7 +35,6 @@ void main()
     }
     else
     {   
-        
         leer_campos(fichero);
 
         exit(EXIT_SUCCESS);
@@ -33,6 +43,7 @@ void main()
 }
 
 void crea_directorios(char dni[8]){
+    // se crean las carpetas con el dni correspondiente en ESTUDIANTES/
     char directorio[20];
 
     sprintf(directorio,"./ESTUDIANTES/%s",dni);

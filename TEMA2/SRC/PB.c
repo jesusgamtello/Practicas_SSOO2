@@ -1,3 +1,13 @@
+/********************************************************
+ * Project:         Práctica 1 de Sistemas Operativos II
+ * 
+ * Program name:    PB.c
+ * 
+ * Author:          Jesus Gamero Tello
+ *
+ * Purpose:         Se copia cada modelo de examen  en la carpteta con el dni correspondiente
+ *
+ *********************************************************/
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -11,7 +21,6 @@ void manejador(int);
 
 void main()
 {
-    //printf("empieza B\n");
 
     FILE *fichero;
     char f[20];
@@ -24,9 +33,9 @@ void main()
         exit(EXIT_FAILURE);
     }
     else
-    {   //sleep(20);
+    {   
         leer_campos(fichero);
-        //printf("termina B\n");
+        
         exit(EXIT_SUCCESS);
     }
     
@@ -34,6 +43,7 @@ void main()
 }
 
 void copiar_examen(char ruta_origen[40],char dni [8]){
+    //copiamos el modelo .pdf en la carpeta de su dni
     char comando[60];
   
     sprintf(comando,"cp %s ./ESTUDIANTES/%s",ruta_origen,dni);
@@ -43,8 +53,8 @@ void copiar_examen(char ruta_origen[40],char dni [8]){
     }
 
 }
-void leer_campos(FILE *fichero)
-{
+void leer_campos(FILE *fichero){
+    //leemos el fichero estudiantes y cogemos los datos del modelo del examen
     char dni[10];
     char examen[10];
     int nota;

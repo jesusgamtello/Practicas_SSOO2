@@ -1,3 +1,13 @@
+/********************************************************
+ * Project:         Práctica 1 de Sistemas Operativos II
+ * 
+ * Program name:    PD.c
+ * 
+ * Author:          Jesus Gamero Tello
+ *
+ * Purpose:         Esta clase se ejecutara cuando se produzca una interrupcion por teclado 
+ *
+ *********************************************************/
 #include <stdio.h>
 #include <stdlib.h>
 

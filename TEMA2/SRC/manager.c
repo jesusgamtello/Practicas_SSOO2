@@ -1,3 +1,13 @@
+/********************************************************
+ * Project:         Práctica 1 de Sistemas Operativos II
+ * 
+ * Program name:    manager.c
+ * 
+ * Author:          Jesus Gamero Tello
+ *
+ * Purpose:         Clase manager que ejecuta todo nuestro programa y que se encarga de la creacion de hijos 
+ *
+ *********************************************************/
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -26,12 +36,14 @@ int main(){
     
     pipe(tuberia);
     sprintf(wr_tuberia, "%d", tuberia[ESCRITURA]);
+    //creacion del proceso A
     pid = fork();
 
     signal(SIGINT,manejador);
 
-    creacion_log();
-    if (system("./EXEC/daemon &") == -1){
+    creacion_log(); // llamamos a este metodo para crearnos el fichero log.txt
+    
+    if (system("./EXEC/daemon &") == -1){ //ejecucion del demonio en segundo plano
         printf("error intentando ejecutar el demonio\n");
         return(EXIT_FAILURE);
     }
@@ -41,6 +53,7 @@ int main(){
         perror("No se puede crear el proceso hijo\n");
         break;
     case 0:
+
         if (execve("./EXEC/PA", arg_list, var_list) == -1)
         {
             printf("Error no esperado en execve, ./PA\n");
@@ -48,8 +61,9 @@ int main(){
         }
         break;
     default:
-        wait(&estado);
+        wait(&estado); //termina A
         log("Creacion de directorios finalizada\n");
+        //creacion del proceso B
         pidb = fork();
         switch (pidb)
         {
@@ -65,6 +79,7 @@ int main(){
             break;
 
         default:
+            //creacion del proceso C
             pidc = fork();
             switch (pidc)
             {
@@ -81,14 +96,13 @@ int main(){
                 break;
 
             default:
-                waitpid(pidb,&estado,0);
+                waitpid(pidb,&estado,0); //termina B
                 log("Copia de modelos finalizada\n");
-                waitpid(pidc,&estado,0);
-                read(tuberia[LECTURA], buffer,sizeof(buffer)); //controlar read
+                waitpid(pidc,&estado,0); //termina C 
+                read(tuberia[LECTURA], buffer,sizeof(buffer)); //leemos la tuberia 
                 sprintf(cadena,"La nota media de la clase es: %s\nFIN DE PROGRAMA\n",buffer);
                 log(cadena);
                 printf("El valor leido de la tuberia es: %s\n", buffer);
-                printf("Todo terminao\n");
                 break;
             }
             break;
@@ -99,6 +113,7 @@ int main(){
     return 0;
 }
 void creacion_log(){
+    //creamos el fichero log.txt
     FILE *fptr;
     char *texto;
     texto = " ******** Log del sistema ********\n";
@@ -113,6 +128,7 @@ void creacion_log(){
     fclose(fptr);
 }
 void log(char append [20]){
+    //aniadimos al fichero log.txt 
     FILE *fptr;
 
     fptr = fopen("log.txt", "a");
@@ -124,6 +140,7 @@ void log(char append [20]){
     fclose(fptr);
 }
 void limpiar(){
+    //llama al proceso D para limpiar la carpeta ESTUDIANTES
     pid_t pid;
     int status;
     pid = fork();

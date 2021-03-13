@@ -1,3 +1,14 @@
+/********************************************************
+ * Project:         Práctica 1 de Sistemas Operativos II
+ * 
+ * Program name:    PC.c
+ * 
+ * Author:          Jesus Gamero Tello
+ *
+ * Purpose:         Se generara un fichero .txt con la nota necesaria en el siguiente
+ *                  examen para aprobar la asignatura
+ *
+ *********************************************************/
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -13,7 +24,6 @@ void manejador(int);
 
 void main(int argc, char *argv [])
 {
-    //printf("empieza C\n");
     int nota_media = 0;
     FILE *fichero;
     char msg[20];
@@ -30,8 +40,7 @@ void main(int argc, char *argv [])
     {
         nota_media = leer_campos(fichero);
         sprintf(msg,"%d",nota_media);
-        write(atoi(argv[0]), msg, strlen(msg)+1);
-        //printf("termina C\n");
+        write(atoi(argv[0]), msg, strlen(msg)+1); //escribimos en la tuberia
         exit(EXIT_SUCCESS);
     }
     
@@ -39,6 +48,7 @@ void main(int argc, char *argv [])
 }
 
 void escribir_fichero(char ruta_origen[40],int nota_necesaria){
+    //genero el .txt con la nota necesaria y lo copiamos en su directorio 
     char *texto;
     char sentence[100];
     char ruta[50];
@@ -60,13 +70,13 @@ void escribir_fichero(char ruta_origen[40],int nota_necesaria){
 }
 
 int nota_media_clase(int nota, int sumatorio_notas, int media_clase, int numero_estudiantes){
-    
+    //se calcula la nota media de toda la clase
     media_clase=sumatorio_notas/numero_estudiantes;
-    //printf("la nota media de la clase es %i\n",media_clase);
     return media_clase;
 }
 
 void calcular_nota(char ruta_origen[40],int nota){
+    //calculo nota media necesaria para pasar el examen de cada alumno
     int nota_necesaria;
     nota_necesaria = 10 - nota;
     escribir_fichero(ruta_origen,nota_necesaria);
@@ -74,6 +84,7 @@ void calcular_nota(char ruta_origen[40],int nota){
 
 int leer_campos(FILE *fichero)
 {
+    //leemos los campos del fichero estudiantes.txt 
     char dni[10];
     char examen[10];
     char ruta_origen[40];
@@ -91,9 +102,7 @@ int leer_campos(FILE *fichero)
             sprintf(ruta_origen,"./ESTUDIANTES/%s",dni);
             calcular_nota(ruta_origen,nota);
             media_clase = nota_media_clase(nota,sumatorio_notas,media_clase,numero_estudiantes);
-            numero_estudiantes++;
-            
-            
+            numero_estudiantes++; 
         }
     }
 

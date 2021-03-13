@@ -1,3 +1,14 @@
+/********************************************************
+ * Project:         Práctica 1 de Sistemas Operativos II
+ * 
+ * Program name:    daemon.c
+ * 
+ * Author:          Jesus Gamero Tello
+ *
+ * Purpose:         Este es el demonio que se ejecutara en segundo plano cada 60 segundos para realizar la copia de seguridad 
+ *                  de nuestros archivos 
+ *
+ *********************************************************/
 #include <stdio.h>
 #include <time.h>
 #include <unistd.h>
