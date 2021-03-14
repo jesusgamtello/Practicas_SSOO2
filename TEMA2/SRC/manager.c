@@ -32,7 +32,7 @@ int main(){
     char *arg_list[] = {NULL};
     char *var_list[] = {NULL};
 
-    char cadena [80];    
+    char cadena_nota [80];    
     
     pipe(tuberia);
     sprintf(wr_tuberia, "%d", tuberia[ESCRITURA]);
@@ -100,8 +100,8 @@ int main(){
                 log("Copia de modelos finalizada\n");
                 waitpid(pidc,&estado,0); //termina C 
                 read(tuberia[LECTURA], buffer,sizeof(buffer)); //leemos la tuberia 
-                sprintf(cadena,"La nota media de la clase es: %s\nFIN DE PROGRAMA\n",buffer);
-                log(cadena);
+                sprintf(cadena_nota,"La nota media de la clase es: %s\nFIN DE PROGRAMA\n",buffer);
+                log(cadena_nota);
                 printf("El valor leido de la tuberia es: %s\n", buffer);
                 break;
             }

@@ -23,7 +23,6 @@ void main()
 {
 
     FILE *fichero;
-    char f[20];
     signal(SIGINT,manejador);
 
     fichero = fopen("./UTILS/estudiantes.txt", "rt");

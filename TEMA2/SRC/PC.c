@@ -6,7 +6,8 @@
  * Author:          Jesus Gamero Tello
  *
  * Purpose:         Se generara un fichero .txt con la nota necesaria en el siguiente
- *                  examen para aprobar la asignatura
+ *                  examen para aprobar la asignatura y se calcula la nota media de la 
+ *                  clase
  *
  *********************************************************/
 #include <stdio.h>

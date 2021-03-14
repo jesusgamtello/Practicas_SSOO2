@@ -20,7 +20,7 @@
 
 int main()
 {
-        mkdir("COPIA_SEGURIDAD", 0777);
+        mkdir("COPIA_SEGURIDAD", 0777); //creamos directorio copia con los permisos
         while (1)
         {
                 if (system("cp -r ESTUDIANTES COPIA_SEGURIDAD") == -1)
