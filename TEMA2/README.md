@@ -5,10 +5,14 @@ En la carpeta UTILS podemos encontrar el fichero estudiantes.txt el cual contine
 En la carpeta SRC nos encontramos los archivos fuentes en .c compuesto por PA.c, PB.c, PC.c y PD.c los cuales son hijos lanzados por el manager.c. También encontramos el daemon.c que se encargara de realizar una copia de seguridad de los archivos generados cada 60 segundos 
 
 Para ejecutar el programa simplemente abrir una terminal en la carpeta del proyecto y ejecutar: 
-    make 
+ ```
+make
+```
 lo que compilara los fuentes y los ejecutara creando la carpeta ESTUDIANTES la cual contiene directorios con el dni de cada alumno con un .txt con la nota necesaria en el siguiente examen y el modelo de examen correspondiente.
 
 Para eliminar todo simplemente ejecutar: 
-    make clean 
+```
+make clean
+```
 
 limpiara todas las carpetas y el log.txt
