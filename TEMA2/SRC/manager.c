@@ -21,10 +21,10 @@
 
 void manejador(int);
 void creacion_log();
-void log();
+void aniadir_log();
 void limpiar();
 int main(){
-    pid_t pid,pidc,pidb;
+    pid_t pida,pidc,pidb;
     int tuberia [2];
     char wr_tuberia [256];
     char buffer [16];
@@ -36,9 +36,7 @@ int main(){
     
     pipe(tuberia);
     sprintf(wr_tuberia, "%d", tuberia[ESCRITURA]);
-    //creacion del proceso A
-    pid = fork();
-
+    
     signal(SIGINT,manejador);
 
     creacion_log(); // llamamos a este metodo para crearnos el fichero log.txt
@@ -47,7 +45,8 @@ int main(){
         printf("error intentando ejecutar el demonio\n");
         return(EXIT_FAILURE);
     }
-    switch (pid)
+    pida = fork();
+    switch (pida)
     {
     case -1:
         perror("No se puede crear el proceso hijo\n");
@@ -62,8 +61,7 @@ int main(){
         break;
     default:
         wait(&estado); //termina A
-        log("Creacion de directorios finalizada\n");
-        //creacion del proceso B
+        aniadir_log("Creacion de directorios finalizada\n");
         pidb = fork();
         switch (pidb)
         {
@@ -79,7 +77,6 @@ int main(){
             break;
 
         default:
-            //creacion del proceso C
             pidc = fork();
             switch (pidc)
             {
@@ -87,7 +84,7 @@ int main(){
                 perror("No se puede crear el proceso hijo\n");
                 break;
             case 0:
-                if (execl("./EXEC/PC", wr_tuberia, var_list) == -1)
+                if (execl("./EXEC/PC", wr_tuberia, var_list,NULL) == -1)
                 {
                     printf("Error no esperado en execl, ./PC\n");
                     exit(EXIT_FAILURE);
@@ -97,12 +94,11 @@ int main(){
 
             default:
                 waitpid(pidb,&estado,0); //termina B
-                log("Copia de modelos finalizada\n");
+                aniadir_log("Copia de modelos finalizada\n");
                 waitpid(pidc,&estado,0); //termina C 
                 read(tuberia[LECTURA], buffer,sizeof(buffer)); //leemos la tuberia 
                 sprintf(cadena_nota,"La nota media de la clase es: %s\nFIN DE PROGRAMA\n",buffer);
-                log(cadena_nota);
-                printf("El valor leido de la tuberia es: %s\n", buffer);
+                aniadir_log(cadena_nota);
                 break;
             }
             break;
@@ -127,7 +123,7 @@ void creacion_log(){
     fputs(texto,fptr);
     fclose(fptr);
 }
-void log(char append [20]){
+void aniadir_log(char append [20]){
     //aniadimos al fichero log.txt 
     FILE *fptr;
 
@@ -141,10 +137,10 @@ void log(char append [20]){
 }
 void limpiar(){
     //llama al proceso D para limpiar la carpeta ESTUDIANTES
-    pid_t pid;
+    pid_t pidd;
     int status;
-    pid = fork();
-    switch (pid)
+    pidd = fork();
+    switch (pidd)
     {
     case -1:
         perror("No se puede crear el proceso hijo\n");
@@ -165,8 +161,7 @@ void limpiar(){
 void manejador(int sig){
     
     printf("señal %d recibida en manager\n",sig);
-    //kill(getpid(),SIGINT);
-    log("Interrupción por teclado\n");
+    aniadir_log("Interrupción por teclado\n");
     limpiar();
     exit(EXIT_SUCCESS); 
 }

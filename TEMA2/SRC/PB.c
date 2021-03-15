@@ -16,7 +16,7 @@
 #include <signal.h>
 
 void leer_campos();
-void copiar_examen();
+int copiar_examen();
 void manejador(int);
 
 void main()
@@ -28,7 +28,7 @@ void main()
     fichero = fopen("./UTILS/estudiantes.txt", "rt");
     if (fichero == NULL )
     {
-        printf("El fichero o el directorio no se pueden abrir\n");
+        printf("El fichero no se pueden abrir\n");
         exit(EXIT_FAILURE);
     }
     else
@@ -41,7 +41,7 @@ void main()
 
 }
 
-void copiar_examen(char ruta_origen[40],char dni [8]){
+int copiar_examen(char ruta_origen[40],char dni [8]){
     //copiamos el modelo .pdf en la carpeta de su dni
     char comando[60];
   
@@ -57,11 +57,11 @@ void leer_campos(FILE *fichero){
     char dni[10];
     char examen[10];
     int nota;
-    char ruta_origen[40];
+    char ruta_origen[50];
     
     while (!feof(fichero))
     {
-        if (fscanf(fichero, "%s %s %i", &dni, &examen, &nota) == 3)
+        if (fscanf(fichero, "%s %s %i", dni, examen, &nota) == 3)
         {   
             sprintf(ruta_origen,"./UTILS/MODELOSEXAMEN/MODELO%s.pdf",examen);
             

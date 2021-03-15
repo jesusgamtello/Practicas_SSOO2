@@ -16,6 +16,7 @@
 #include <sys/stat.h>
 #include <dirent.h>
 #include <signal.h>
+#include <unistd.h>
 
 int leer_campos();
 void calcular_nota();
@@ -34,7 +35,7 @@ void main(int argc, char *argv [])
     fichero = fopen("./UTILS/estudiantes.txt", "rt");
     if (fichero == NULL )
     {
-        printf("El fichero o el directorio no se pueden abrir\n");
+        printf("El fichero no se pueden abrir\n");
         exit(EXIT_FAILURE);
     }
     else
@@ -97,7 +98,7 @@ int leer_campos(FILE *fichero)
     
     while (!feof(fichero))
     {
-        if (fscanf(fichero, "%s %s %i", &dni, &examen, &nota) == 3)
+        if (fscanf(fichero, "%s %s %i", dni, examen, &nota) == 3)
         {   
             sumatorio_notas += nota;
             sprintf(ruta_origen,"./ESTUDIANTES/%s",dni);

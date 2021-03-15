@@ -35,8 +35,8 @@ void main()
     }
     else
     {   
+        
         leer_campos(fichero);
-
         exit(EXIT_SUCCESS);
     }
 
@@ -63,7 +63,7 @@ void leer_campos(FILE *fichero)
     mkdir(dir,S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
     do
  {
-    if (fscanf(fichero, "%s %s %i", &dni, &examen, &nota) == 3)
+    if (fscanf(fichero, "%s %s %i", dni, examen, &nota) == 3)
       crea_directorios(dni);
 
       
