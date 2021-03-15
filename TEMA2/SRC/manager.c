@@ -8,6 +8,7 @@
  * Purpose:         Clase manager que ejecuta todo nuestro programa y que se encarga de la creacion de hijos 
  *
  *********************************************************/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
