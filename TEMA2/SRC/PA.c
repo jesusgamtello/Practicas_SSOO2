@@ -35,7 +35,6 @@ void main()
     }
     else
     {   
-        
         leer_campos(fichero);
         exit(EXIT_SUCCESS);
     }
