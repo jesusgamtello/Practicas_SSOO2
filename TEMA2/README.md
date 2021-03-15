@@ -1,4 +1,4 @@
-#PRIMERA PRACTICA SISTEMAS OPERATIVOS II
+# PRIMERA PRACTICA SISTEMAS OPERATIVOS II
 
 En la carpeta _UTILS_ podemos encontrar el fichero estudiantes.txt el cual contine el dni, nota del ultimo examen y modelo de examen correspondiente a cada estudiante, asi como la carpeta _MODELOSEXAMEN_ que contiene los tres modelos del examen (A,B,C) en formato .pdf
 
