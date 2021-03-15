@@ -1,6 +1,6 @@
 **PRIMERA PRACTICA SISTEMAS OPERATIVOS II**
 
-En la carpeta _UTILS_ podemos encontrar el fichero estudiantes.txt el cual contine el dni, nota del ultimo examen y modelo de examen correspondiente a cada estudiante, asi como la carpeta MODELOSEXAMEN que contiene los tres modelos del examen (A,B,C) en formato .pdf
+En la carpeta _UTILS_ podemos encontrar el fichero estudiantes.txt el cual contine el dni, nota del ultimo examen y modelo de examen correspondiente a cada estudiante, asi como la carpeta _MODELOSEXAMEN_ que contiene los tres modelos del examen (A,B,C) en formato .pdf
 
 En la carpeta _SRC_ nos encontramos los archivos fuentes en .c compuesto por PA.c, PB.c, PC.c y PD.c los cuales son hijos lanzados por el manager.c. También encontramos el daemon.c que se encargara de realizar una copia de seguridad de los archivos generados cada 60 segundos 
 
