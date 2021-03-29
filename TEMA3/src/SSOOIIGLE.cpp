@@ -6,59 +6,92 @@
 #include <mutex>
 #include <fstream>
 #include <string>
+#include <sstream>
+#include <cctype>
 
 void desde_donde(std::vector<int> v, int inicio, int valor_fin);
-void read_file(std::string book);
+void read_file(std::string book, std::string word_argv);
+void find_word(std::string word_argv, std::string word, int number_of_lines);
 int main(int argc, char* argv[])
 {
     if (argc != 4 ) {
         // Tell the user how to run the program
-        std::cerr << "Usage: " << argv[0] << " <nombre_fichero> <palabra> <numero_hilos>" << std::endl;
-        /* "Usage messages" are a conventional way of telling the user
-         * how to run a program if they enter the command incorrectly.
-         */
+        std::cerr << "Usage: " << argv[0] << " <file_name> <word> <thread_number>" << std::endl;
         return 1;
+    }else{
+        read_file(argv[1], argv[2]);
     }
     
-    std::vector<int> v_naleatorios;
-    std::vector<std::thread> vhilos;
-    read_file(argv[1]);
-    /*int size_task = LIMITE/NUM_MAX_HILOS;
-    long suma = 0;
-    for (int i = 0; i < LIMITE; i++)
-    {
-        int numero = rand();
-        v_naleatorios.push_back(numero);
-        suma +=numero;
-    }
-    std::cout << "La suma acumulada es: " << suma << std::endl;
-    int valor = 0;
-    int inicio = 0;
-    for (int i = 0; i < NUM_MAX_HILOS; i++)
-    {
-
-        inicio = i * size_task;
-        valor = (inicio + size_task) - 1;
-        if (i == NUM_MAX_HILOS - 1) valor = LIMITE - 1;
-        vhilos.push_back(std::thread(desde_donde, v_naleatorios, inicio, valor));
-    }
-
-    std::for_each(vhilos.begin(), vhilos.end(), std::mem_fn(&std::thread::join));*/
+    
+    
 
 }
-void read_file(std::string book){
-    std::string line;
-    std::string path;
-    path = "./utils/"+book;
-    std::cout << path<< std::endl;
-    std::ifstream myfile (path);
-    if (myfile.is_open())
+void find_word(std::string word_argv, std::string word_read, int number_of_lines){
+    // if((word_argv.compare(word_read)) == 0){
+    //     std::cout << word_argv << " is equal to " << word_read << std::endl;
+    //     std::cout << number_of_lines << std::endl;
+    // }
+    // else if (word_read[word_argv.length()+1] == 46)
+    // {
+    //     std::cout <<" punto " << std::endl;
+    //     for (int i = 0, len = word_read.size(); i < len; i++)
+    // {
+    //     if (ispunct(word_read[i]))
+    //     {
+    //         word_read.erase(i--, 1);
+    //         len = word_read.size();
+    //     }
+    // }
+    
+   for (int i = 0, len = word_read.size(); i < len; i++)
     {
-        while ( getline (myfile,line) )
+        if (ispunct(word_read[i]) && i!=0)
         {
-        std::cout << line << std::endl;
+            word_read.erase(i--, 1);
+            if ((word_argv.compare(word_read)) == 0)
+            {
+                break;
+            }
+            len = word_read.size();
+        }if (!isalpha(word_read[i]) && i == 0)
+        {
+            word_read.erase(i--,1);
+            if ((word_argv.compare(word_read)) == 0)
+            {
+                break;
+            }
+            len = word_read.size();
+            
+
         }
-        myfile.close();
+        
+    }
+    if ((word_argv.compare(word_read)) == 0)
+    {
+        std::cout << word_argv << " is equal to " << word_read << std::endl;
+    }
+}
+void read_file(std::string book, std::string word_argv){
+    std::string word_read, line, path;
+    int number_of_lines = 0;
+    path = "./utils/"+book;
+    std::ifstream file (path);
+    if (file.is_open())
+    {
+        while ( getline (file,line) )
+        {
+            number_of_lines++;
+            std::istringstream entire_line(line);
+            
+            while(entire_line >> word_read){
+                //std::cout << word_read.length() << std::endl;
+                //std::cout << number_of_lines << std::endl;
+                find_word(word_argv, word_read,number_of_lines);
+                
+            }
+                
+        }
+        file.close();
     }
 
     else std::cout << "Unable to open file or file doesn't exist"<< std::endl; 

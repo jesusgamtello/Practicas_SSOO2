@@ -16,7 +16,7 @@ ssooiigle:
 	$(CC) src/SSOOIIGLE.cpp -o exec/SSOOIIGLE $(FLAGS)
 
 run:
-	exec/SSOOIIGLE Actitud_de_vencedor.txt hola 4
+	exec/SSOOIIGLE Actitud_de_vencedor.txt sueño 4
 
 clean:
 	rm -r $(DIR)
