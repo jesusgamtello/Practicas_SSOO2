@@ -27,49 +27,34 @@ int main(int argc, char* argv[])
 
 }
 void find_word(std::string word_argv, std::string word_read, int number_of_lines){
-    // if((word_argv.compare(word_read)) == 0){
-    //     std::cout << word_argv << " is equal to " << word_read << std::endl;
-    //     std::cout << number_of_lines << std::endl;
-    // }
-    // else if (word_read[word_argv.length()+1] == 46)
-    // {
-    //     std::cout <<" punto " << std::endl;
-    //     for (int i = 0, len = word_read.size(); i < len; i++)
-    // {
-    //     if (ispunct(word_read[i]))
-    //     {
-    //         word_read.erase(i--, 1);
-    //         len = word_read.size();
-    //     }
-    // }
-    
-   for (int i = 0, len = word_read.size(); i < len; i++)
-    {
-        if (ispunct(word_read[i]) && i!=0)
+    //std::transform(word_read.begin(), word_read.end(), word_read.begin(), ::tolower);    // convierte a minuscula     
+    for (int i = 0, len = word_read.size(); i < len; i++)
         {
-            word_read.erase(i--, 1);
-            if ((word_argv.compare(word_read)) == 0)
+            if (ispunct(word_read[i]) && i!=0)
             {
-                break;
-            }
-            len = word_read.size();
-        }if (!isalpha(word_read[i]) && i == 0)
-        {
-            word_read.erase(i--,1);
-            if ((word_argv.compare(word_read)) == 0)
+                word_read.erase(i--, 1);
+                if ((word_argv.compare(word_read)) == 0)
+                {
+                    break;
+                }
+                len = word_read.size();
+            }if (!isalpha(word_read[i]) && i == 0)
             {
-                break;
-            }
-            len = word_read.size();
-            
+                word_read.erase(i--,1);
+                if ((word_argv.compare(word_read)) == 0)
+                {
+                    break;
+                }
+                len = word_read.size();
+                
 
+            }
+            
         }
-        
-    }
-    if ((word_argv.compare(word_read)) == 0)
-    {
-        std::cout << word_argv << " is equal to " << word_read << std::endl;
-    }
+        if ((word_argv.compare(word_read)) == 0)
+        {
+            std::cout << word_argv << " is equal to " << word_read << std::endl;
+        }
 }
 void read_file(std::string book, std::string word_argv){
     std::string word_read, line, path;
