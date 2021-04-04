@@ -12,6 +12,7 @@
 void desde_donde(std::vector<int> v, int inicio, int valor_fin);
 void read_file(std::string book, std::string word_argv);
 void find_word(std::string word_argv, int number_of_lines, std::string line);
+std::string clean_word(std::string word_read);
 int main(int argc, char* argv[])
 {
     if (argc != 4 ) {
@@ -25,6 +26,25 @@ int main(int argc, char* argv[])
     
     
 
+}
+std::string clean_word(std::string word_read){
+    for (int i = 0, len = word_read.size(); i < len; i++)
+    {
+        if (ispunct(word_read[i]) && i != 0)
+        {
+            word_read.erase(i--, 1);
+
+            len = word_read.size();
+        }
+        if (!isalpha(word_read[i]) && i == 0)
+        {
+            word_read.erase(i--, 1);
+
+            len = word_read.size();
+        }
+    }
+
+    return word_read;
 }
 void find_word(std::string word_argv, int number_of_lines, std::string line)
 {
@@ -44,22 +64,9 @@ void find_word(std::string word_argv, int number_of_lines, std::string line)
         word_read = vect[i];
         std::string word_to_print = vect[i];
         std::transform(word_read.begin(), word_read.end(), word_read.begin(), ::tolower);
-        for (int i = 0, len = word_read.size(); i < len; i++)
-        {
-            if (ispunct(word_read[i]) && i != 0)
-            {
-                word_read.erase(i--, 1);
+      
+        word_read = clean_word(word_read);
 
-                len = word_read.size();
-            }
-            if (!isalpha(word_read[i]) && i == 0)
-            {
-                word_read.erase(i--, 1);
-
-                len = word_read.size();
-            }
-        }
-        //std::cout << word_read << std::endl;
         if ((word_argv.compare(word_read)) == 0)
         {
             if ((vect[i].compare(word_to_print)) == 0)
