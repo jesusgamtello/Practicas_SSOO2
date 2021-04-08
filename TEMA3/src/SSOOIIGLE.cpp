@@ -8,8 +8,10 @@
 #include <string>
 #include <sstream>
 #include <cctype>
+#include "../include/colors.h"
+#include "result.cpp"
 
-void desde_donde(std::vector<int> v, int inicio, int valor_fin);
+void start_message();
 void read_file(std::string book, std::string word_argv);
 void find_word(std::string word_argv, int number_of_lines, std::string line);
 std::string clean_word(std::string word_read);
@@ -20,12 +22,16 @@ int main(int argc, char* argv[])
         std::cerr << "Usage: " << argv[0] << " <file_name> <word> <thread_number>" << std::endl;
         return 1;
     }else{
+        start_message();
         read_file(argv[1], argv[2]);
     }
     
     
     
 
+}
+void start_message(){
+    std::cout << BOLDBLUE << "SS" << BOLDRED << "O" << BOLDYELLOW << "II" << BOLDBLUE << "GL" << BOLDGREEN << "E" << BOLDRED<< std::endl;
 }
 std::string clean_word(std::string word_read){
     for (int i = 0, len = word_read.size(); i < len; i++)
@@ -73,6 +79,7 @@ void find_word(std::string word_argv, int number_of_lines, std::string line)
             {
 
                 std::cout << vect[i - 1] << " " << vect[i] << " " << vect[i + 1] << " .....numero de linea " << number_of_lines << std::endl;
+                final_result result (1,number_of_lines,0,50,vect[i-1],vect[i],vect[i+1]);     /********************* CREACION DE OBJETO!!!!!!!! *********************/
             }
         }
     }
