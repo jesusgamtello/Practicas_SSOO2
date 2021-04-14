@@ -1,3 +1,17 @@
+/**************************************************************
+ * Project:         Práctica 2 
+ * 
+ * Program name:    SSOOIIGLE.cpp
+ 
+ * Author:          Jesús Gamero Tello
+ * 
+ * Date created:    14/4/2021
+ * 
+ * Purpose:         The input is a file.txt this program read it and search the word 
+ *                  who is specified. Also can be specified the numbers of threads.
+ * 
+ ****************************************************************/
+
 #include <iostream>
 #include <thread>
 #include <vector>
@@ -12,19 +26,19 @@
 #include "../include/colors.h"
 #include "result.cpp"
 
-std::vector<std::thread> vthreads;
-std::queue <final_result>final_queue;
-std::queue <final_result>aux_queue;
-std::mutex sem;
+std::vector<std::thread>    vthreads;
+std::queue <final_result>   final_queue;
+std::queue <final_result>   aux_queue;
+std::mutex                  sem;
 
-void start_message();
-int count_total_lines(std::string book);
-void read_file(std::string book, std::string word_argv,int id,int start, int end);
-void find_word(std::string word_argv, int number_of_lines, std::string line, int id, int start, int end);
-void divide_in_threads(std::string book,std::string word_argv,int num_threads, int number_of_lines);
-void print_queue(int id);
-void print();
-std::string clean_word(std::string word_read);
+void                        start_message();
+int                         count_total_lines(std::string book);
+void                        read_file(std::string book, std::string word_argv,int id,int start, int end);
+void                        find_word(std::string word_argv, int number_of_lines, std::string line, int id, int start, int end);
+void                        divide_in_threads(std::string book,std::string word_argv,int num_threads, int number_of_lines);
+void                        order_queue(int id);
+void                        print();
+std::string                 clean_word(std::string word_read);
 int main(int argc, char* argv[])
 {
     if (argc != 4 ) {
@@ -33,12 +47,11 @@ int main(int argc, char* argv[])
         return 1;
     }else{
         start_message();
-        std::string book = argv[1];
-        std::string word_argv = argv[2];
-        int num_threads = std::stoi(argv[3]);
-        int number_of_lines = count_total_lines(book);
+        std::string     book                =   argv[1];
+        std::string     word_argv           =   argv[2];
+        int             num_threads         =   std::stoi(argv[3]);
+        int             number_of_lines     =   count_total_lines(book);
         divide_in_threads(book,word_argv,num_threads,number_of_lines);
-        //read_file(book, word_argv);
     }
     
     
@@ -48,11 +61,17 @@ int main(int argc, char* argv[])
 void start_message(){
     std::cout << BOLDBLUE << "SS" << BOLDRED << "O" << BOLDYELLOW << "II" << BOLDBLUE << "GL" << BOLDGREEN << "E" << BOLDRED<< RESET << std::endl;
 }
+/******************************************************
+ * Function:    count_total_lines
+ * Date:     14/4/2021
+ * Input arguments:  book book's path
+ * Purpose:          Count the number of the specified file
+ ******************************************************/
 int count_total_lines(std::string book){
- std::string  line, path;
-    int number_of_lines = 0;
-    path = "./utils/"+book;
-    std::ifstream file (path);
+    std::string     line;
+    int             number_of_lines     =   0;
+    std::string     path                =   "./utils/"+book;
+    std::ifstream   file (path);
     if (file.is_open())
     {
         while ( getline (file,line) )
@@ -65,6 +84,12 @@ int count_total_lines(std::string book){
     }else std::cout << "Unable to open file or file doesn't exist"<< std::endl; 
     return number_of_lines;
 }
+/******************************************************
+ * Function:    clean_word
+ * Date:     14/4/2021
+ * Input arguments:  word_read word read in each line
+ * Purpose:          Clean the words of strange characters
+ ******************************************************/
 std::string clean_word(std::string word_read){
     for (int i = 0, len = word_read.size(); i < len; i++)
     {
@@ -84,12 +109,19 @@ std::string clean_word(std::string word_read){
 
     return word_read;
 }
+/******************************************************
+ * Function:    find_word
+ * Date:     14/4/2021
+ * Input arguments:  word_argv word specified, number_of_lines book's number of line,
+ *                   id thread id, start where the thread start,
+ *                   end where the thread end  
+ * Purpose:          find the word who we are looking for 
+ ******************************************************/
 void find_word(std::string word_argv, int number_of_lines, std::string line,int id, int start, int end)
 {
-    //std::transform(word_read.begin(), word_read.end(), word_read.begin(), ::tolower);    // convierte a minuscula
-    std::istringstream entire_line(line);
-    std::string word_read;
-    std::vector<std::string> vect;
+    std::istringstream          entire_line(line);
+    std::string                 word_read;
+    std::vector<std::string>    vect;
     vect.push_back(" ");
     while (entire_line >> word_read)
     {
@@ -99,8 +131,8 @@ void find_word(std::string word_argv, int number_of_lines, std::string line,int 
 
     for (int i = 0; i < vect.size(); i++)
     {
-        word_read = vect[i];
-        std::string word_to_print = vect[i];
+                        word_read       =   vect[i];
+        std::string     word_to_print   =   vect[i];
         std::transform(word_read.begin(), word_read.end(), word_read.begin(), ::tolower);
       
         word_read = clean_word(word_read);
@@ -110,32 +142,30 @@ void find_word(std::string word_argv, int number_of_lines, std::string line,int 
             if ((vect[i].compare(word_to_print)) == 0)
             {
 
-                //std::cout << vect[i - 1] << " " << vect[i] << " " << vect[i + 1] << " .....numero de linea " << number_of_lines << std::endl;
+                
                 final_result result (id,number_of_lines,start,end,vect[i-1],vect[i],vect[i+1]);     /********************* CREACION DE OBJETO!!!!!!!! *********************/
                 sem.lock();
-                final_queue.push(result);
+                aux_queue.push(result);
                 sem.unlock();
             }
         }
     }
 }
+/******************************************************
+ * Function:    read_file
+ * Date:     14/4/2021
+ * Input arguments:  book name, word_argv word specified, id thread id, start where the thread start,
+ *                   en where the thread end
+ * Purpose:          read the file and try to find the word
+ ******************************************************/
 void read_file(std::string book, std::string word_argv, int id,int start, int end){
-    std::string word_read, line, path;
-    std::vector <std::string> vector_of_words;
-    int number_of_lines = 1;
-    path = "./utils/"+book;
-    std::ifstream file (path);
+    std::string                 word_read, line;
+    std::vector <std::string>   vector_of_words;
+    int                         number_of_lines         =   1;
+    std::string                 path                    =   "./utils/"+book;
+    std::ifstream               file (path);
     if (file.is_open())
     {
-        /*while ( getline (file,line) )
-        {
-            number_of_lines++;
-            
-                find_word(word_argv, number_of_lines, line, id, start, end);
-                
-            
-        }
-        file.close();*/
         while (number_of_lines <= end)
         {
             std::getline(file, line, '\n');
@@ -147,20 +177,27 @@ void read_file(std::string book, std::string word_argv, int id,int start, int en
 
             number_of_lines++;
         }
+        file.close();
     }
 
     else std::cout << "Unable to open file or file doesn't exist"<< std::endl; 
 
 }
-
+/******************************************************
+ * Function:    divide_in_threads
+ * Date:     14/4/2021
+ * Input arguments:  the book to read, the word specified in the makefile, num_threads num of threads specified,
+ *                   number_of_lines book's number of lines
+ * Purpose:          divide the file in threads to search simultaneous results
+ ******************************************************/
 void divide_in_threads(std::string book, std::string word_argv,int num_threads,int number_of_lines){
-    int start = 0;
-    int end = 0;
-    int size_task = number_of_lines/num_threads;
-    int id = 0;
+    int     start       =   0;
+    int     end         =   0;
+    int     size_task   =   number_of_lines/num_threads;
+    int     id          =   0;
     for (int i = 0; i < num_threads; i++){
-        start = (i * size_task) +1;
-        end = (start + size_task) - 1;
+        start           =   (i * size_task) +1;
+        end             =   (start + size_task) - 1;
         if (i == num_threads - 1) end = number_of_lines;
         id++;
 
@@ -169,35 +206,27 @@ void divide_in_threads(std::string book, std::string word_argv,int num_threads,i
     }
     std::for_each(vthreads.begin(),vthreads.end(), std::mem_fn(&std::thread::join));
     for (int i = 1 ;i< num_threads + 1; i++){
-        print_queue(i);
+        order_queue(i);
     }
     print();
    
 }
-
-void print_queue(int id){
-    /*while(!final_queue.empty()){
-        std::cout<<"Hilo "<<final_queue.front().get_id ();
-        std::cout<<" inicio: "<< final_queue.front().get_start_thread_line();
-        std::cout<<" - final: "<< final_queue.front().get_end_thread_line();
-        std::cout<<" :: línea "<<final_queue.front().get_line();
-        std::cout<<" :: ... "<<final_queue.front().get_behind_word ()<<" "<<final_queue.front().get_exact_word ()<<" "<<final_queue.front().get_after_word ();
-		std::cout<<" ... "<<std::endl;
-        
-		final_queue.pop();
-	}
-    
-    std::cout<<std::endl;*/
-    std::queue <final_result>queue = final_queue;
-    //int id = 1;
-    int j = 0;
-    int initial_size = final_queue.size();
-    //while(!final_queue.empty()){
+/******************************************************
+ * Function:    order_queue
+ * Date:     14/4/2021
+ * Input arguments:  id, the thread_id to store in the queue 
+ * Purpose:          Order the queue to print it later
+ ******************************************************/
+void order_queue(int id){
+  
+    std::queue <final_result>   queue           =   aux_queue;
+    int                         j               =   0;
+    int                         initial_size    =   aux_queue.size();
       while (!queue.empty()){
         
         if (queue.front().get_id () == id){
             
-            aux_queue.push(queue.front());
+            final_queue.push(queue.front());
             queue.pop() ;
         }
         else queue.pop();
@@ -208,10 +237,16 @@ void print_queue(int id){
     }
    
 }
+/******************************************************
+ * Function:    print
+ * Date:     14/4/2021  
+ * Purpose:          Print the final queue with the results
+ ******************************************************/
 void print(){
+    
+    std::cout<<std::endl;
 
-
- /*while(!final_queue.empty()){
+     while(!final_queue.empty()){
         std::cout<<"Hilo "<<final_queue.front().get_id ();
         std::cout<<" inicio: "<< final_queue.front().get_start_thread_line();
         std::cout<<" - final: "<< final_queue.front().get_end_thread_line();
@@ -220,19 +255,6 @@ void print(){
 		std::cout<<" ... "<<std::endl;
         
 		final_queue.pop();
-	}*/
-    
-    std::cout<<std::endl;
-
-     while(!aux_queue.empty()){
-        std::cout<<"Hilo "<<aux_queue.front().get_id ();
-        std::cout<<" inicio: "<< aux_queue.front().get_start_thread_line();
-        std::cout<<" - final: "<< aux_queue.front().get_end_thread_line();
-        std::cout<<" :: línea "<<aux_queue.front().get_line();
-        std::cout<<" :: ... "<<aux_queue.front().get_behind_word ()<<" "<<aux_queue.front().get_exact_word ()<<" "<<aux_queue.front().get_after_word ();
-		std::cout<<" ... "<<std::endl;
-        
-		aux_queue.pop();
 	}
     
     std::cout<<std::endl;
