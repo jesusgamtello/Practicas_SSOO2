@@ -207,6 +207,7 @@ void divide_in_threads(std::string book, std::string word_argv,int num_threads,i
     std::for_each(vthreads.begin(),vthreads.end(), std::mem_fn(&std::thread::join));
     for (int i = 1 ;i< num_threads + 1; i++){
         order_queue(i);
+        
     }
     print();
    
@@ -243,19 +244,29 @@ void order_queue(int id){
  * Purpose:          Print the final queue with the results
  ******************************************************/
 void print(){
-    
-    std::cout<<std::endl;
 
-     while(!final_queue.empty()){
-        std::cout<<"Hilo "<<final_queue.front().get_id ();
-        std::cout<<" inicio: "<< final_queue.front().get_start_thread_line();
-        std::cout<<" - final: "<< final_queue.front().get_end_thread_line();
-        std::cout<<" :: línea "<<final_queue.front().get_line();
-        std::cout<<" :: ... "<<final_queue.front().get_behind_word ()<<" "<<final_queue.front().get_exact_word ()<<" "<<final_queue.front().get_after_word ();
-		std::cout<<" ... "<<std::endl;
-        
-		final_queue.pop();
-	}
-    
+    int     id  =   1;
+    while (!final_queue.empty())
+    {
+        if (final_queue.front().get_id() == id)
+        {
+            std::cout << BOLDRED << "Hilo " << final_queue.front().get_id() << RESET;
+        }
+        else
+        {
+            std::cout << std::endl;
+            std::cout << BOLDBLUE << "Hilo " << final_queue.front().get_id();
+            while(id!=final_queue.front().get_id()) id++;
+        }
+        //std::cout << BOLDRED << "Hilo " << final_queue.front().get_id() << RESET;
+        std::cout << " inicio: " << final_queue.front().get_start_thread_line();
+        std::cout << " - final: " << final_queue.front().get_end_thread_line();
+        std::cout << " :: línea " << final_queue.front().get_line();
+        std::cout << " :: ... " << final_queue.front().get_behind_word() << " " << final_queue.front().get_exact_word() << " " << final_queue.front().get_after_word();
+        std::cout << " ... " << std::endl;
+
+        final_queue.pop();
+    }
+
     std::cout<<std::endl;
 }
