@@ -59,7 +59,9 @@ int main(int argc, char* argv[])
 
 }
 void start_message(){
-    std::cout << BOLDBLUE << "SS" << BOLDRED << "O" << BOLDYELLOW << "II" << BOLDBLUE << "GL" << BOLDGREEN << "E" << BOLDRED<< RESET << std::endl;
+    std::cout <<BOLDMAGENTA<< "WELCOME TO THE SEARCHER :: "<<BOLDBLUE << "SS" << BOLDRED << "O" << BOLDYELLOW << "II" << BOLDBLUE << "GL" << BOLDGREEN << "E" << BOLDRED<< RESET << std::endl;
+    std::cout << std::endl;
+
 }
 /******************************************************
  * Function:    count_total_lines
